@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mouww AI 💗</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ffe8f3, #eee4ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #33263a;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      height: 100vh;
+      max-height: 850px;
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+
+    .avatar {
+      width: 90px;
+      height: 90px;
+      margin: auto;
+      border-radius: 50%;
+      background: linear-gradient(135deg,#ff9ecb,#c9a7ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 45px;
+      box-shadow: 0 8px 25px rgba(190,120,190,.25);
+    }
+
+    h1 {
+      margin: 10px 0 3px;
+      font-size: 25px;
+    }
+
+    .status {
+      font-size: 13px;
+      color: #8b718f;
+    }
+
+    .chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 12px 15px;
+      margin-bottom: 12px;
+      border-radius: 18px;
+      line-height: 1.45;
+      font-size: 15px;
+    }
+
+    .ai {
+      background: white;
+      border-bottom-left-radius: 5px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.06);
+    }
+
+    .user {
+      margin-left: auto;
+      background: #dca8ff;
+      color: white;
+      border-bottom-right-radius: 5px;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 8px;
+      padding: 14px;
+      background: rgba(255,255,255,.8);
+      border-top: 1px solid rgba(0,0,0,.06);
+    }
+
+    input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 13px 16px;
+      border-radius: 25px;
+      background: #f6eff8;
+      font-size: 15px;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      background: #d18cff;
+      color: white;
+      font-size: 20px;
+    }
+
+    button:active {
+      transform: scale(.94);
+    }
+
+    @media (min-width: 600px) {
+      .app {
+        height: 90vh;
+        border-radius: 28px;
+        box-shadow: 0 20px 60px rgba(80,40,100,.18);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <div class="avatar">🎀</div>
+    <h1>Mouww 💗</h1>
+    <div class="status">Your cute AI companion ✨</div>
+  </div>
+
+  <div class="chat" id="chat">
+
+    <div class="message ai">
+      Chuchu 🥹 Ninak ntha patye?<br>
+      Parayoo… Mouww ivide undallo 🫂💗
+    </div>
+
+  </div>
+
+  <div class="input-area">
+    <input
+      id="messageInput"
+      type="text"
+      placeholder="Chuchu, type something..."
+      onkeydown="handleKey(event)"
+    >
+    <button onclick="sendMessage()">➤</button>
+  </div>
+
+</div>
+
+<script>
+
+function addMessage(text, type) {
+  const chat = document.getElementById("chat");
+
+  const message = document.createElement("div");
+  message.className = "message " + type;
+  message.innerHTML = text;
+
+  chat.appendChild(message);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function sendMessage() {
+
+  const input = document.getElementById("messageInput");
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  addMessage(text, "user");
+
+  input.value = "";
+
+  setTimeout(() => {
+
+    let reply =
+      "Chuchu 🥹 Mouww ivide undu! 💗 " +
+      "Ninte message kitti. Real AI connection add cheythal " +
+      "njan ninakku proper answer tharum ✨";
+
+    addMessage(reply, "ai");
+
+  }, 500);
+}
+
+function handleKey(event) {
+  if (event.key === "Enter") {
+    sendMessage();
+  }
+}
+
+</script>
+
+</body>
+</html>
