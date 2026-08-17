@@ -178,7 +178,23 @@
     SUPABASE_URL,
     SUPABASE_ANON_KEY
   );
-</script>
+  
+  async function initMouwwAuth() {
+    const { data: { session } } =
+      await supabaseClient.auth.getSession();
+
+    if (!session) {
+      const { error } =
+        await supabaseClient.auth.signInAnonymously();
+
+      if (error) {
+        console.error("Mouww auth error:", error);
+      }
+    }
+  }
+
+  initMouwwAuth();
+
 
 function addMessage(text, type) {
   const chat = document.getElementById("chat");
