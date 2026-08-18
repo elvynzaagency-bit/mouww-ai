@@ -1,1 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mouww — Payment</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg1: #ffe8f4;
+      --bg2: #eee5ff;
+      --card: rgba(255,255,255,.84);
+      --item: rgba(255,255,255,.72);
+      --text: #30253a;
+      --muted: #8d7896;
+      --accent: #b978ff;
+      --pink: #ff73b5;
+      --green: #35b86a;
+      --border: rgba(0,0,0,.06);
+    }
+
+    body.dark {
+      --bg1: #100b18;
+      --bg2: #21162d;
+      --card: rgba(29,21,40,.94);
+      --item: rgba(50,38,60,.92);
+      --text: #fff5ff;
+      --muted: #b9a9c0;
+      --border: rgba(255,255,255,.08);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,110,180,.35), transparent 28%),
+        radial-gradient(circle at 90% 90%, rgba(135,100,255,.35), transparent 30%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 500px;
+      min-height: 100vh;
+
+      background: var(--card);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width:600px) {
+      .app {
+        min-height: 90vh;
+        max-height: 900px;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 25px 70px rgba(60,30,90,.22);
+      }
+    }
+
+    .header {
+      height: 65px;
+      padding: 0 15px;
+
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .back,
+    .theme {
+      width: 42px;
+      height: 42px;
+
+      border: none;
+      border-radius: 50%;
+
+      background: var(--item);
+      color: var(--text);
+
+      cursor: pointer;
+      font-size: 19px;
+    }
+
+    .title {
+      flex: 1;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 15px 30px;
+    }
+
+    .balance {
+      padding: 20px;
+
+      border-radius: 24px;
+
+      background:
+        linear-gradient(135deg, var(--pink), var(--accent));
+
+      color: white;
+
+      margin-bottom: 18px;
+
+      box-shadow: 0 15px 35px rgba(180,110,220,.25);
+    }
+
+    .balance-label {
+      font-size: 12px;
+      opacity: .85;
+      margin-bottom: 8px;
+    }
+
+    .balance-value {
+      font-size: 31px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .balance-sub {
+      font-size: 11px;
+      opacity: .8;
+    }
+
+    .section-title {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      margin: 14px 4px 9px;
+    }
+
+    .plans {
+      display: grid;
+      gap: 10px;
+    }
+
+    .plan {
+      padding: 16px;
+
+      border-radius: 20px;
+
+      background: var(--item);
+
+      border: 1px solid var(--border);
+
+      cursor: pointer;
+
+      transition: .2s;
+    }
+
+    .plan:hover {
+      transform: translateY(-2px);
+    }
+
+    .plan.selected {
+      border: 2px solid var(--accent);
+    }
+
+    .plan-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .plan-icon {
+      width: 43px;
+      height: 43px;
+
+      border-radius: 14px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: rgba(185,120,255,.15);
+
+      font-size: 21px;
+    }
+
+    .plan-info {
+      flex: 1;
+    }
+
+    .plan-info strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .plan-info span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .price {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .payment-box {
+      background: var(--item);
+      border: 1px solid var(--border);
+
+      border-radius: 20px;
+
+      padding: 16px;
+    }
+
+    .method {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+
+      padding: 12px;
+
+      border-radius: 15px;
+
+      background: rgba(185,120,255,.09);
+
+      margin-bottom: 8px;
+
+      cursor: pointer;
+    }
+
+    .method:last-child {
+      margin-bottom: 0;
+    }
+
+    .method-icon {
+      width: 38px;
+      height: 38px;
+
+      border-radius: 11px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: rgba(185,120,255,.15);
+
+      font-size: 18px;
+    }
+
+    .method-info {
+      flex: 1;
+    }
+
+    .method-info strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+
+    .method-info span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .radio {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+    }
+
+    .pay-button {
+      width: 100%;
+
+      margin-top: 16px;
+
+      padding: 14px;
+
+      border: none;
+      border-radius: 17px;
+
+      background:
+        linear-gradient(135deg, var(--pink), var(--accent));
+
+      color: white;
+
+      font-weight: bold;
+      font-size: 14px;
+
+      cursor: pointer;
+    }
+
+    .pay-button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .note {
+      text-align: center;
+
+      color: var(--muted);
+
+      font-size: 10px;
+
+      line-height: 1.5;
+
+      margin-top: 12px;
+    }
+
+    .transactions {
+      display: grid;
+      gap: 8px;
+    }
+
+    .transaction {
+      display: flex;
+      align-items: center;
+
+      padding: 12px;
+
+      border-radius: 16px;
+
+      background: var(--item);
+    }
+
+    .transaction-icon {
+      width: 38px;
+      height: 38px;
+
+      border-radius: 12px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: rgba(53,184,106,.12);
+
+      color: var(--green);
+    }
+
+    .transaction-info {
+      flex: 1;
+      margin-left: 10px;
+    }
+
+    .transaction-info strong {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 3px;
+    }
+
+    .transaction-info span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .transaction-amount {
+      color: var(--green);
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .toast {
+      position: fixed;
+
+      left: 50%;
+      bottom: 25px;
+
+      transform: translate(-50%,20px);
+
+      opacity: 0;
+      pointer-events: none;
+
+      padding: 11px 17px;
+
+      border-radius: 20px;
+
+      background: rgba(30,20,40,.94);
+      color: white;
+
+      font-size: 12px;
+
+      z-index: 20;
+
+      transition: .3s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%,0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="app">
+
+    <header class="header">
+
+      <button class="back" onclick="goBack()">←</button>
+
+      <div class="title">
+        Payments 💳
+      </div>
+
+      <button
+        class="theme"
+        id="themeButton"
+        onclick="toggleTheme()"
+      >
+        🌙
+      </button>
+
+    </header>
+
+
+    <section class="content">
+
+      <div class="balance">
+
+        <div class="balance-label">
+          Mouww Wallet
+        </div>
+
+        <div class="balance-value">
+          ₹0.00
+        </div>
+
+        <div class="balance-sub">
+          Available balance
+        </div>
+
+      </div>
+
+
+      <div class="section-title">
+        Choose a Plan
+      </div>
+
+      <div class="plans">
+
+        <div
+          class="plan selected"
+          onclick="selectPlan(this, 'Starter', 49)"
+        >
+
+          <div class="plan-top">
+
+            <div class="plan-icon">
+              🌱
+            </div>
+
+            <div class="plan-info">
+
+              <strong>
+                Starter
+              </strong>
+
+              <span>
+                Basic Mouww features
+              </span>
+
+            </div>
+
+            <div class="price">
+              ₹49
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="plan"
+          onclick="selectPlan(this, 'Premium', 149)"
+        >
+
+          <div class="plan-top">
+
+            <div class="plan-icon">
+              💎
+            </div>
+
+            <div class="plan-info">
+
+              <strong>
+                Premium
+              </strong>
+
+              <span>
+                More features & benefits
+              </span>
+
+            </div>
+
+            <div class="price">
+              ₹149
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="plan"
+          onclick="selectPlan(this, 'Pro', 299)"
+        >
+
+          <div class="plan-top">
+
+            <div class="plan-icon">
+              👑
+            </div>
+
+            <div class="plan-info">
+
+              <strong>
+                Pro
+              </strong>
+
+              <span>
+                Full Mouww experience
+              </span>
+
+            </div>
+
+            <div class="price">
+              ₹299
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="section-title">
+        Payment Method
+      </div>
+
+      <div class="payment-box">
+
+        <label class="method">
+
+          <div class="method-icon">
+            📱
+          </div>
+
+          <div class="method-info">
+
+            <strong>
+              UPI
+            </strong>
+
+            <span>
+              Google Pay, PhonePe, Paytm
+            </span>
+
+          </div>
+
+          <input
+            class="radio"
+            type="radio"
+            name="method"
+            value="upi"
+            checked
+          >
+
+        </label>
+
+
+        <label class="method">
+
+          <div class="method-icon">
+            💳
+          </div>
+
+          <div class="method-info">
+
+            <strong>
+              Card
+            </strong>
+
+            <span>
+              Credit or debit card
+            </span>
+
+          </div>
+
+          <input
+            class="radio"
+            type="radio"
+            name="method"
+            value="card"
+          >
+
+        </label>
+
+
+        <label class="method">
+
+          <div class="method-icon">
+            🏦
+          </div>
+
+          <div class="method-info">
+
+            <strong>
+              Net Banking
+            </strong>
+
+            <span>
+              Pay using your bank account
+            </span>
+
+          </div>
+
+          <input
+            class="radio"
+            type="radio"
+            name="method"
+            value="bank"
+          >
+
+        </label>
+
+
+        <button
+          class="pay-button"
+          onclick="startPayment()"
+        >
+          Continue to Payment — ₹49
+        </button>
+
+        <p class="note">
+          Secure payment will be connected to the
+          official payment gateway later.
+        </p>
+
+      </div>
+
+
+      <div class="section-title">
+        Recent Transactions
+      </div>
+
+      <div class="transactions">
+
+        <div class="transaction">
+
+          <div class="transaction-icon">
+            ✓
+          </div>
+
+          <div class="transaction-info">
+
+            <strong>
+              No transactions yet
+            </strong>
+
+            <span>
+              Your payment history will appear here
+            </span>
+
+          </div>
+
+          <div class="transaction-amount">
+            —
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <div
+    class="toast"
+    id="toast"
+  ></div>
+
+
+  <script>
+
+    let selectedPlan = {
+      name: "Starter",
+      price: 49
+    };
+
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById("toast");
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+
+        toast.classList.remove("show");
+
+      }, 2200);
+    }
+
+
+    function selectPlan(element, name, price) {
+
+      document
+        .querySelectorAll(".plan")
+        .forEach(plan => {
+          plan.classList.remove("selected");
+        });
+
+      element.classList.add("selected");
+
+      selectedPlan = {
+        name: name,
+        price: price
+      };
+
+      document.querySelector(
+        ".pay-button"
+      ).textContent =
+        `Continue to Payment — ₹${price}`;
+    }
+
+
+    function startPayment() {
+
+      const method =
+        document.querySelector(
+          'input[name="method"]:checked'
+        ).value;
+
+      showToast(
+        `${selectedPlan.name} selected • ${method.toUpperCase()} 💳`
+      );
+
+      /*
+        IMPORTANT:
+
+        Real payment processing should be
+        connected later using a secure
+        payment gateway/server.
+
+        Never put secret payment keys
+        inside this HTML file.
+      */
+    }
+
+
+    function toggleTheme() {
+
+      document.body.classList.toggle("dark");
+
+      const dark =
+        document.body.classList.contains("dark");
+
+      document.getElementById(
+        "themeButton"
+      ).textContent =
+        dark ? "☀️" : "🌙";
+
+      localStorage.setItem(
+        "mouww-theme",
+        dark ? "dark" : "light"
+      );
+    }
+
+
+    if (
+      localStorage.getItem("mouww-theme")
+      === "dark"
+    ) {
+
+      document.body.classList.add("dark");
+
+      document.getElementById(
+        "themeButton"
+      ).textContent = "☀️";
+    }
+
+
+    function goBack() {
+
+      if (history.length > 1) {
+
+        history.back();
+
+      } else {
+
+        showToast(
+          "Home page will be connected later 🏠"
+        );
+      }
+    }
+
+  </script>
+
+</body>
+</html>
