@@ -1,1 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Mouww — Home</title>
+
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+
+<body>
+
+  <main class="app">
+
+    <!-- Header -->
+    <header class="header">
+
+      <div class="logo">
+        Mouww 💗
+      </div>
+
+      <button
+        class="icon-btn"
+        onclick="toggleTheme()"
+      >
+        🌙
+      </button>
+
+    </header>
+
+
+    <!-- Main Content -->
+    <section class="content">
+
+      <div class="welcome-card">
+
+        <div class="avatar">
+          🌸
+        </div>
+
+        <div>
+          <h2>
+            Welcome back!
+          </h2>
+
+          <p>
+            Share your moments with friends.
+          </p>
+        </div>
+
+      </div>
+
+
+      <!-- Quick Navigation -->
+
+      <h3>
+        Explore Mouww
+      </h3>
+
+      <div class="navigation-grid">
+
+        <a
+          href="../profile/profile.html"
+          class="nav-card"
+        >
+          <div class="nav-icon">
+            👤
+          </div>
+
+          <strong>
+            Profile
+          </strong>
+
+          <span>
+            Your profile
+          </span>
+        </a>
+
+
+        <a
+          href="../friends/friends.html"
+          class="nav-card"
+        >
+          <div class="nav-icon">
+            👥
+          </div>
+
+          <strong>
+            Friends
+          </strong>
+
+          <span>
+            Your friends
+          </span>
+        </a>
+
+
+        <a
+          href="../chat/chat.html"
+          class="nav-card"
+        >
+          <div class="nav-icon">
+            💬
+          </div>
+
+          <strong>
+            Chat
+          </strong>
+
+          <span>
+            Messages
+          </span>
+        </a>
+
+
+        <a
+          href="../stories/stories.html"
+          class="nav-card"
+        >
+          <div class="nav-icon">
+            📖
+          </div>
+
+          <strong>
+            Stories
+          </strong>
+
+          <span>
+            See stories
+          </span>
+        </a>
+
+
+        <a
+          href="../settings/settings.html"
+          class="nav-card"
+        >
+          <div class="nav-icon">
+            ⚙️
+          </div>
+
+          <strong>
+            Settings
+          </strong>
+
+          <span>
+            App settings
+          </span>
+        </a>
+
+
+        <a
+          href="../privacy/privacy.html"
+          class="nav-card"
+        >
+          <div class="nav-icon">
+            🔐
+          </div>
+
+          <strong>
+            Privacy
+          </strong>
+
+          <span>
+            Privacy controls
+          </span>
+        </a>
+
+      </div>
+
+
+      <!-- Create Post -->
+
+      <div class="create-card">
+
+        <h3>
+          What's on your mind? 💭
+        </h3>
+
+        <textarea
+          id="postText"
+          placeholder="Share something with your friends..."
+        ></textarea>
+
+        <button
+          onclick="createPost()"
+        >
+          Create Post ✨
+        </button>
+
+      </div>
+
+
+      <!-- Feed -->
+
+      <h3 class="feed-title">
+        Latest Updates
+      </h3>
+
+
+      <article class="post">
+
+        <div class="post-header">
+
+          <div class="small-avatar">
+            🌸
+          </div>
+
+          <div>
+            <strong>
+              Ammu
+            </strong>
+
+            <small>
+              5 minutes ago
+            </small>
+          </div>
+
+        </div>
+
+        <p>
+          Welcome to Mouww! 💗
+          Let's create something beautiful together.
+        </p>
+
+        <div class="post-actions">
+
+          <button onclick="likePost(this)">
+            ♡ Like
+          </button>
+
+          <button onclick="commentPost()">
+            💬 Comment
+          </button>
+
+          <button onclick="sharePost()">
+            ↗ Share
+          </button>
+
+        </div>
+
+      </article>
+
+
+      <article class="post">
+
+        <div class="post-header">
+
+          <div class="small-avatar">
+            🎧
+          </div>
+
+          <div>
+            <strong>
+              Arjun
+            </strong>
+
+            <small>
+              18 minutes ago
+            </small>
+          </div>
+
+        </div>
+
+        <p>
+          New music coming soon 🎶🔥
+        </p>
+
+        <div class="post-actions">
+
+          <button onclick="likePost(this)">
+            ♡ Like
+          </button>
+
+          <button onclick="commentPost()">
+            💬 Comment
+          </button>
+
+          <button onclick="sharePost()">
+            ↗ Share
+          </button>
+
+        </div>
+
+      </article>
+
+
+    </section>
+
+
+    <!-- Bottom Navigation -->
+
+    <nav class="bottom-nav">
+
+      <a
+        href="home.html"
+        class="active"
+      >
+        🏠
+        <span>Home</span>
+      </a>
+
+      <a href="../stories/stories.html">
+        📖
+        <span>Stories</span>
+      </a>
+
+      <a href="../chat/chat.html">
+        💬
+        <span>Chat</span>
+      </a>
+
+      <a href="../friends/friends.html">
+        👥
+        <span>Friends</span>
+      </a>
+
+      <a href="../profile/profile.html">
+        👤
+        <span>Profile</span>
+      </a>
+
+    </nav>
+
+  </main>
+
+
+  <script src="../assets/app.js"></script>
+
+
+  <script>
+
+    function toggleTheme() {
+
+      document.body.classList.toggle("dark");
+
+      const isDark =
+        document.body.classList.contains("dark");
+
+      localStorage.setItem(
+        "mouww-theme",
+        isDark ? "dark" : "light"
+      );
+
+    }
+
+
+    function createPost() {
+
+      const text =
+        document.getElementById("postText");
+
+      if (!text.value.trim()) {
+
+        alert(
+          "Write something first 💭"
+        );
+
+        return;
+      }
+
+      alert(
+        "Post created successfully! ✨"
+      );
+
+      text.value = "";
+
+    }
+
+
+    function likePost(button) {
+
+      if (
+        button.textContent.includes("♡")
+      ) {
+
+        button.textContent =
+          "♥ Liked";
+
+      } else {
+
+        button.textContent =
+          "♡ Like";
+
+      }
+
+    }
+
+
+    function commentPost() {
+
+      alert(
+        "Comments will be connected soon 💬"
+      );
+
+    }
+
+
+    function sharePost() {
+
+      if (
+        navigator.share
+      ) {
+
+        navigator.share({
+          title: "Mouww",
+          text: "Check this post on Mouww!"
+        });
+
+      } else {
+
+        alert(
+          "Share feature will be connected soon ↗"
+        );
+
+      }
+
+    }
+
+
+    // Load saved theme
+
+    if (
+      localStorage.getItem("mouww-theme")
+      === "dark"
+    ) {
+
+      document.body.classList.add("dark");
+
+    }
+
+  </script>
+
+</body>
+            </html>
