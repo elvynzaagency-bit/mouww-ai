@@ -1,1 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Mouww AI — Login</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg1: #ffe7f3;
+      --bg2: #eee5ff;
+      --card: rgba(255, 255, 255, 0.78);
+      --input: rgba(255, 255, 255, 0.72);
+      --text: #30243a;
+      --muted: #8d7896;
+      --border: rgba(255, 255, 255, 0.8);
+      --pink: #ff72b5;
+      --purple: #9871ff;
+      --shadow: rgba(100, 60, 130, 0.18);
+    }
+
+    body.dark {
+      --bg1: #100b18;
+      --bg2: #21152d;
+      --card: rgba(32, 23, 42, 0.86);
+      --input: rgba(48, 35, 58, 0.9);
+      --text: #fff5ff;
+      --muted: #b9a8c0;
+      --border: rgba(255, 255, 255, 0.08);
+      --shadow: rgba(0, 0, 0, 0.35);
+    }
+
+    body {
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+
+      background:
+        radial-gradient(
+          circle at 15% 15%,
+          rgba(255, 105, 180, 0.45),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at 85% 85%,
+          rgba(140, 100, 255, 0.42),
+          transparent 30%
+        ),
+        linear-gradient(
+          135deg,
+          var(--bg1),
+          var(--bg2)
+        );
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      transition: background 0.4s ease;
+    }
+
+    /* Animated glow */
+
+    .glow {
+      position: fixed;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      filter: blur(70px);
+      pointer-events: none;
+      opacity: 0.65;
+      animation: floatGlow 8s ease-in-out infinite alternate;
+    }
+
+    .glow.one {
+      background: #ff73b8;
+      top: -90px;
+      left: -80px;
+    }
+
+    .glow.two {
+      background: #9670ff;
+      right: -90px;
+      bottom: -90px;
+      animation-delay: 2s;
+    }
+
+    @keyframes floatGlow {
+      from {
+        transform: translate(0, 0) scale(1);
+      }
+
+      to {
+        transform: translate(45px, 35px) scale(1.2);
+      }
+    }
+
+    /* Particles */
+
+    .particle {
+      position: fixed;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.8);
+      pointer-events: none;
+      animation: particleFloat linear infinite;
+    }
+
+    .p1 {
+      left: 12%;
+      top: 75%;
+      animation-duration: 9s;
+    }
+
+    .p2 {
+      left: 30%;
+      top: 55%;
+      animation-duration: 12s;
+    }
+
+    .p3 {
+      left: 65%;
+      top: 70%;
+      animation-duration: 10s;
+    }
+
+    .p4 {
+      left: 85%;
+      top: 40%;
+      animation-duration: 13s;
+    }
+
+    .p5 {
+      left: 52%;
+      top: 20%;
+      animation-duration: 11s;
+    }
+
+    @keyframes particleFloat {
+      0% {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+
+      25% {
+        opacity: 1;
+      }
+
+      75% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-130px);
+        opacity: 0;
+      }
+    }
+
+    /* Login card */
+
+    .login-card {
+      width: calc(100% - 32px);
+      max-width: 430px;
+      padding: 30px 25px;
+      border-radius: 30px;
+
+      background: var(--card);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+
+      border: 1px solid var(--border);
+
+      box-shadow:
+        0 25px 70px var(--shadow);
+
+      animation: cardEnter 0.7s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes cardEnter {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Theme button */
+
+    .theme-button {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+
+      width: 42px;
+      height: 42px;
+
+      border: none;
+      border-radius: 50%;
+
+      background: var(--input);
+      color: var(--text);
+
+      font-size: 18px;
+      cursor: pointer;
+
+      transition: 0.25s;
+    }
+
+    .theme-button:hover {
+      transform: rotate(15deg) scale(1.05);
+    }
+
+    /* Logo */
+
+    .logo {
+      width: 88px;
+      height: 88px;
+
+      margin: 5px auto 15px;
+
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 44px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ff9bca,
+          #c4a2ff
+        );
+
+      box-shadow:
+        0 12px 35px rgba(180, 100, 210, 0.3);
+
+      animation: logoPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes logoPulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.07);
+      }
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 29px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    /* Input */
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 7px;
+      color: var(--muted);
+    }
+
+    .input-box {
+      display: flex;
+      align-items: center;
+
+      background: var(--input);
+
+      border: 1px solid transparent;
+
+      border-radius: 16px;
+
+      transition: 0.25s;
+    }
+
+    .input-box:focus-within {
+      border-color: rgba(170, 110, 255, 0.55);
+
+      box-shadow:
+        0 0 0 4px rgba(170, 110, 255, 0.08);
+    }
+
+    .input-icon {
+      padding-left: 15px;
+      font-size: 18px;
+    }
+
+    input {
+      width: 100%;
+      border: none;
+      outline: none;
+
+      background: transparent;
+
+      color: var(--text);
+
+      padding: 14px 12px;
+
+      font-size: 15px;
+    }
+
+    input::placeholder {
+      color: var(--muted);
+    }
+
+    .password-toggle {
+      border: none;
+      background: transparent;
+
+      color: var(--muted);
+
+      font-size: 17px;
+
+      padding: 10px 14px;
+
+      cursor: pointer;
+    }
+
+    /* Forgot */
+
+    .forgot {
+      text-align: right;
+      margin: 4px 2px 18px;
+    }
+
+    .forgot button {
+      border: none;
+      background: transparent;
+
+      color: #a266d9;
+
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* Login */
+
+    .login-button {
+      width: 100%;
+
+      border: none;
+
+      padding: 15px;
+
+      border-radius: 17px;
+
+      color: white;
+
+      font-size: 16px;
+      font-weight: bold;
+
+      cursor: pointer;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--pink),
+          var(--purple)
+        );
+
+      box-shadow:
+        0 10px 25px rgba(170, 100, 220, 0.28);
+
+      transition: 0.25s;
+    }
+
+    .login-button:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 14px 30px rgba(170, 100, 220, 0.35);
+    }
+
+    .login-button:active {
+      transform: scale(0.98);
+    }
+
+    /* Divider */
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      margin: 22px 0;
+
+      color: var(--muted);
+
+      font-size: 12px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+
+    /* Create */
+
+    .create-account {
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .create-account button {
+      border: none;
+      background: transparent;
+
+      color: #a266d9;
+
+      font-weight: bold;
+
+      cursor: pointer;
+    }
+
+    .privacy-note {
+      text-align: center;
+
+      color: var(--muted);
+
+      font-size: 11px;
+
+      margin-top: 18px;
+
+      line-height: 1.5;
+    }
+
+    /* Loading */
+
+    .loading {
+      display: none;
+      margin-left: 8px;
+    }
+
+    .login-button.loading-state .loading {
+      display: inline-block;
+    }
+
+    /* Toast */
+
+    .toast {
+      position: fixed;
+
+      left: 50%;
+      bottom: 25px;
+
+      transform:
+        translate(-50%, 20px);
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      padding: 12px 18px;
+
+      border-radius: 20px;
+
+      background: rgba(30,20,40,.92);
+
+      color: white;
+
+      font-size: 13px;
+
+      z-index: 10;
+
+      transition: 0.3s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 480px) {
+
+      .login-card {
+        padding: 27px 20px;
+      }
+
+      .logo {
+        width: 78px;
+        height: 78px;
+        font-size: 38px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Animated background -->
+
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+
+  <div class="particle p1"></div>
+  <div class="particle p2"></div>
+  <div class="particle p3"></div>
+  <div class="particle p4"></div>
+  <div class="particle p5"></div>
+
+
+  <!-- Login -->
+
+  <main class="login-card">
+
+    <button
+      class="theme-button"
+      id="themeButton"
+      onclick="toggleTheme()"
+      aria-label="Toggle dark theme"
+    >
+      🌙
+    </button>
+
+
+    <div class="logo">
+      🎀
+    </div>
+
+    <h1>Mouww 💗</h1>
+
+    <p class="subtitle">
+      Your cute AI companion ✨
+    </p>
+
+
+    <!-- Username / Email -->
+
+    <div class="field">
+
+      <label for="email">
+        Email or Username
+      </label>
+
+      <div class="input-box">
+
+        <span class="input-icon">
+          👤
+        </span>
+
+        <input
+          id="email"
+          type="text"
+          placeholder="Enter your email or username"
+          autocomplete="username"
+        >
+
+      </div>
+
+    </div>
+
+
+    <!-- Password -->
+
+    <div class="field">
+
+      <label for="password">
+        Password
+      </label>
+
+      <div class="input-box">
+
+        <span class="input-icon">
+          🔑
+        </span>
+
+        <input
+          id="password"
+          type="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+        >
+
+        <button
+          class="password-toggle"
+          id="passwordToggle"
+          onclick="togglePassword()"
+          type="button"
+          aria-label="Show password"
+        >
+          👁️
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- Forgot password -->
+
+    <div class="forgot">
+
+      <button
+        type="button"
+        onclick="forgotPassword()"
+      >
+        Forgot password?
+      </button>
+
+    </div>
+
+
+    <!-- Login button -->
+
+    <button
+      class="login-button"
+      id="loginButton"
+      onclick="loginDemo()"
+      type="button"
+    >
+      Login
+      <span class="loading">⏳</span>
+    </button>
+
+
+    <div class="divider">
+      OR
+    </div>
+
+
+    <!-- Create account -->
+
+    <div class="create-account">
+
+      Don't have an account?
+
+      <button
+        type="button"
+        onclick="createAccount()"
+      >
+        Create account
+      </button>
+
+    </div>
+
+
+    <p class="privacy-note">
+      By continuing, you agree to Mouww's
+      Privacy Policy and Terms.
+    </p>
+
+  </main>
+
+
+  <div
+    class="toast"
+    id="toast"
+  ></div>
+
+
+  <script>
+
+    /* Dark theme */
+
+    function toggleTheme() {
+
+      document.body.classList.toggle("dark");
+
+      const isDark =
+        document.body.classList.contains("dark");
+
+      const button =
+        document.getElementById("themeButton");
+
+      button.textContent =
+        isDark ? "☀️" : "🌙";
+
+      localStorage.setItem(
+        "mouww-theme",
+        isDark ? "dark" : "light"
+      );
+    }
+
+
+    /* Restore theme */
+
+    function loadTheme() {
+
+      const saved =
+        localStorage.getItem("mouww-theme");
+
+      if (saved === "dark") {
+
+        document.body.classList.add("dark");
+
+        document.getElementById(
+          "themeButton"
+        ).textContent = "☀️";
+      }
+    }
+
+
+    loadTheme();
+
+
+    /* Show / hide password */
+
+    function togglePassword() {
+
+      const password =
+        document.getElementById("password");
+
+      const button =
+        document.getElementById("passwordToggle");
+
+      if (password.type === "password") {
+
+        password.type = "text";
+
+        button.textContent = "🙈";
+
+      } else {
+
+        password.type = "password";
+
+        button.textContent = "👁️";
+      }
+    }
+
+
+    /* Toast */
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById("toast");
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+
+        toast.classList.remove("show");
+
+      }, 2500);
+    }
+
+
+    /* Temporary login UI */
+
+    function loginDemo() {
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+      const button =
+        document.getElementById("loginButton");
+
+
+      if (!email) {
+
+        showToast(
+          "Please enter your email or username 💗"
+        );
+
+        return;
+      }
+
+
+      if (!password) {
+
+        showToast(
+          "Please enter your password 🔑"
+        );
+
+        return;
+      }
+
+
+      button.classList.add("loading-state");
+
+      button.disabled = true;
+
+
+      setTimeout(() => {
+
+        button.classList.remove(
+          "loading-state"
+        );
+
+        button.disabled = false;
+
+        showToast(
+          "Login API will be connected later ✨"
+        );
+
+      }, 900);
+    }
+
+
+    /* Forgot password */
+
+    function forgotPassword() {
+
+      showToast(
+        "Password recovery will be connected later 🔐"
+      );
+    }
+
+
+    /* Create account */
+
+    function createAccount() {
+
+      showToast(
+        "Account creation page will be added next 💗"
+      );
+    }
+
+  </script>
+
+</body>
+  </html>
