@@ -1,1 +1,1203 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mouww — Settings</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg1: #ffe8f4;
+      --bg2: #eee5ff;
+      --card: rgba(255,255,255,.78);
+      --item: rgba(255,255,255,.72);
+      --text: #30253a;
+      --muted: #8d7896;
+      --accent: #c17dff;
+      --danger: #ff5f78;
+      --border: rgba(0,0,0,.06);
+    }
+
+    body.dark {
+      --bg1: #100b18;
+      --bg2: #21162d;
+      --card: rgba(30,22,40,.9);
+      --item: rgba(50,38,60,.9);
+      --text: #fff5ff;
+      --muted: #b9a9c0;
+      --border: rgba(255,255,255,.08);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+
+      background:
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(255,110,180,.35),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at 90% 90%,
+          rgba(135,100,255,.35),
+          transparent 30%
+        ),
+        linear-gradient(
+          135deg,
+          var(--bg1),
+          var(--bg2)
+        );
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      overflow-x: hidden;
+      transition: .3s;
+    }
+
+    .orb {
+      position: fixed;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: .45;
+      pointer-events: none;
+
+      animation: float 9s ease-in-out infinite alternate;
+    }
+
+    .orb.one {
+      background: #ff78b9;
+      top: -100px;
+      left: -90px;
+    }
+
+    .orb.two {
+      background: #9670ff;
+      right: -100px;
+      bottom: -100px;
+      animation-delay: 2s;
+    }
+
+    @keyframes float {
+      from {
+        transform: translate(0,0) scale(1);
+      }
+
+      to {
+        transform: translate(40px,35px) scale(1.2);
+      }
+    }
+
+    .app {
+      width: 100%;
+      max-width: 500px;
+      min-height: 100vh;
+
+      background: var(--card);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (min-width:600px) {
+      .app {
+        min-height: 90vh;
+        max-height: 900px;
+        border-radius: 30px;
+        overflow: hidden;
+
+        box-shadow:
+          0 25px 70px rgba(70,40,90,.22);
+      }
+    }
+
+    /* Header */
+
+    .header {
+      padding: 18px;
+
+      display: flex;
+      align-items: center;
+      gap: 13px;
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .back {
+      width: 42px;
+      height: 42px;
+
+      border: none;
+      border-radius: 50%;
+
+      background: var(--item);
+      color: var(--text);
+
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .header h1 {
+      flex: 1;
+      font-size: 21px;
+    }
+
+    .theme {
+      width: 42px;
+      height: 42px;
+
+      border: none;
+      border-radius: 50%;
+
+      background: var(--item);
+      color: var(--text);
+
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    /* Profile */
+
+    .profile {
+      padding: 22px 18px;
+
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .profile-photo {
+      width: 70px;
+      height: 70px;
+
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 34px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ff9dcc,
+          #c4a2ff
+        );
+
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .profile-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .profile-info h2 {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .profile-info p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .edit-profile {
+      border: none;
+      border-radius: 18px;
+
+      padding: 9px 13px;
+
+      background: var(--accent);
+      color: white;
+
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    /* Sections */
+
+    .content {
+      padding: 0 15px 25px;
+
+      overflow-y: auto;
+      max-height: 700px;
+    }
+
+    .section-title {
+      color: var(--muted);
+      font-size: 12px;
+
+      margin: 12px 5px 8px;
+
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+
+    .settings-group {
+      background: var(--item);
+
+      border-radius: 20px;
+
+      overflow: hidden;
+
+      border: 1px solid var(--border);
+    }
+
+    .setting {
+      min-height: 60px;
+
+      display: flex;
+      align-items: center;
+
+      gap: 12px;
+
+      padding: 11px 14px;
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting:last-child {
+      border-bottom: none;
+    }
+
+    .setting-icon {
+      width: 38px;
+      height: 38px;
+
+      border-radius: 12px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: rgba(190,130,255,.14);
+
+      font-size: 18px;
+
+      flex-shrink: 0;
+    }
+
+    .setting-text {
+      flex: 1;
+    }
+
+    .setting-text strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 3px;
+    }
+
+    .setting-text span {
+      display: block;
+
+      font-size: 11px;
+
+      color: var(--muted);
+    }
+
+    .arrow {
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    /* Switch */
+
+    .switch {
+      position: relative;
+
+      width: 45px;
+      height: 25px;
+
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+
+      border-radius: 20px;
+
+      background: #cfc5d5;
+
+      cursor: pointer;
+
+      transition: .25s;
+    }
+
+    .slider::before {
+      content: "";
+
+      position: absolute;
+
+      width: 19px;
+      height: 19px;
+
+      left: 3px;
+      top: 3px;
+
+      border-radius: 50%;
+
+      background: white;
+
+      transition: .25s;
+      box-shadow: 0 2px 5px rgba(0,0,0,.15);
+    }
+
+    .switch input:checked + .slider {
+      background: var(--accent);
+    }
+
+    .switch input:checked + .slider::before {
+      transform: translateX(20px);
+    }
+
+    /* Profile photo input */
+
+    #photoInput {
+      display: none;
+    }
+
+    /* Danger */
+
+    .danger {
+      color: var(--danger);
+    }
+
+    /* Toast */
+
+    .toast {
+      position: fixed;
+
+      left: 50%;
+      bottom: 25px;
+
+      transform: translate(-50%,20px);
+
+      opacity: 0;
+      pointer-events: none;
+
+      background: rgba(30,20,40,.94);
+      color: white;
+
+      padding: 11px 17px;
+
+      border-radius: 20px;
+
+      font-size: 12px;
+
+      z-index: 20;
+
+      transition: .3s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%,0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+
+  <main class="app">
+
+    <!-- Header -->
+
+    <header class="header">
+
+      <button
+        class="back"
+        onclick="goBack()"
+      >
+        ←
+      </button>
+
+      <h1>Settings ⚙️</h1>
+
+      <button
+        class="theme"
+        id="themeButton"
+        onclick="toggleTheme()"
+      >
+        🌙
+      </button>
+
+    </header>
+
+
+    <!-- Profile -->
+
+    <section class="profile">
+
+      <div
+        class="profile-photo"
+        id="profilePhoto"
+      >
+        🎀
+      </div>
+
+      <div class="profile-info">
+
+        <h2 id="profileName">
+          Mouww User
+        </h2>
+
+        <p id="profileUsername">
+          @mouww_user
+        </p>
+
+      </div>
+
+      <button
+        class="edit-profile"
+        onclick="editProfile()"
+      >
+        Edit
+      </button>
+
+    </section>
+
+
+    <div class="content">
+
+      <!-- Account -->
+
+      <div class="section-title">
+        Account
+      </div>
+
+      <div class="settings-group">
+
+        <div
+          class="setting"
+          onclick="changePhoto()"
+          style="cursor:pointer"
+        >
+
+          <div class="setting-icon">
+            📷
+          </div>
+
+          <div class="setting-text">
+
+            <strong>
+              Profile Photo
+            </strong>
+
+            <span>
+              Add or change your profile picture
+            </span>
+
+          </div>
+
+          <div class="arrow">
+            ›
+          </div>
+
+        </div>
+
+
+        <div
+          class="setting"
+          onclick="editProfile()"
+          style="cursor:pointer"
+        >
+
+          <div class="setting-icon">
+            👤
+          </div>
+
+          <div class="setting-text">
+
+            <strong>
+              Username
+            </strong>
+
+            <span>
+              Change your Mouww username
+            </span>
+
+          </div>
+
+          <div class="arrow">
+            ›
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- Appearance -->
+
+      <div class="section-title">
+        Appearance
+      </div>
+
+      <div class="settings-group">
+
+        <div class="setting">
+
+          <div class="setting-icon">
+            🌙
+          </div>
+
+          <div class="setting-text">
+
+            <strong>
+              Dark Theme
+            </strong>
+
+            <span>
+              Use dark appearance across Mouww
+            </span>
+
+          </div>
+
+          <label class="switch">
+
+            <input
+              type="checkbox"
+              id="darkSwitch"
+              onchange="toggleThemeFromSwitch()"
+            >
+
+            <span class="slider"></span>
+
+          </label>
+
+        </div>
+
+
+        <div class="setting">
+
+          <div class="setting-icon">
+            ✨
+          </div>
+
+          <div class="setting-text">
+
+            <strong>
+              Animations
+            </strong>
+
+            <span>
+              Enable interface animations
+            </span>
+
+          </div>
+
+          <label class="switch">
+
+            <input
+              type="checkbox"
+              id="animationSwitch"
+              checked
+              onchange="toggleAnimations()"
+            >
+
+            <span class="slider"></span>
+
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <!-- Notifications -->
+
+      <div class="section-title">
+        Notifications
+      </div>
+
+      <div class="settings-group">
+
+        <div class="setting">
+
+          <div class="setting-icon">
+            🔔
+          </div>
+
+          <div class="setting-text">
+
+            <strong>
+              Notifications
+            </strong>
+
+            <span>
+              Receive Mouww notifications
+            </span>
+
+          </div>
+
+          <label class="switch">
+
+            <input
+              type="checkbox"
+              checked
+              onchange="notificationToggle(this)"
+            >
+
+            <span class="slider"></span>
+
+          </label>
+
+        </div>
+
+
+        <div class="setting">
+
+          <div class="setting-icon">
+            💬
+          </div>
+
+          <div class="setting-text">
+
+            <strong>
+              Message Alerts
+            </strong>
+
+            <span>
+              Get alerts for new messages
+            </span>
+
+          </div>
+
+          <label class="switch">
+
+            <input
+              type="checkbox"
+              checked
+              onchange="notificationToggle(this)"
+            >
+
+            <span class="slider"></span>
+
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <!-- Privacy -->
+
+      <div class="section-title">
+        Privacy & Security
+      </div>
+
+      <div class="settings-group">
+
+        <div
+          class="setting"
+          onclick="openPrivacy()"
+          style="cursor:pointer"
+        >
+
+          <div class="setting-icon">
+            🔐
+          </div>
+
+          <div class="setting-text">
+
+            <strong>
+              Privacy
+            </strong>
+
+            <span>
+              Manage your privacy settings
+            </span>
+
+          </div>
+
+          <div class="arrow">
+            ›
+          </div>
+
+        </div>
+
+
+        <div
+          class="setting"
+          onclick="showToast('Security settings coming soon 🔐')"
+          style="cursor:pointer"
+        >
+
+          <div class="setting-icon">
+            🛡️
+          </div>
+
+          <div class="setting-text">
+
+            <strong>
+              Security
+            </strong>
+
+            <span>
+              Account security and login controls
+            </span>
+
+          </div>
+
+          <div class="arrow">
+            ›
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- App -->
+
+      <div class="section-title">
+        App
+      </div>
+
+      <div class="settings-group">
+
+        <div
+          class="setting"
+          onclick="showToast('Mouww AI v1.0 💗')"
+          style="cursor:pointer"
+        >
+
+          <div class="setting-icon">
+            ℹ️
+          </div>
+
+          <div class="setting-text">
+
+            <strong>
+              About Mouww
+            </strong>
+
+            <span>
+              Version 1.0
+            </span>
+
+          </div>
+
+          <div class="arrow">
+            ›
+          </div>
+
+        </div>
+
+
+        <div
+          class="setting"
+          onclick="logout()"
+          style="cursor:pointer"
+        >
+
+          <div class="setting-icon">
+            🚪
+          </div>
+
+          <div class="setting-text">
+
+            <strong class="danger">
+              Log Out
+            </strong>
+
+            <span>
+              Sign out of your Mouww account
+            </span>
+
+          </div>
+
+          <div class="arrow danger">
+            ›
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Hidden photo picker -->
+
+    <input
+      type="file"
+      id="photoInput"
+      accept="image/*"
+      onchange="uploadPhoto(event)"
+    >
+
+  </main>
+
+
+  <div
+    class="toast"
+    id="toast"
+  ></div>
+
+
+  <script>
+
+    /* Toast */
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById("toast");
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+
+        toast.classList.remove("show");
+
+      }, 2300);
+    }
+
+
+    /* Theme */
+
+    function toggleTheme() {
+
+      document.body.classList.toggle("dark");
+
+      const dark =
+        document.body.classList.contains("dark");
+
+      document.getElementById(
+        "themeButton"
+      ).textContent =
+        dark ? "☀️" : "🌙";
+
+      document.getElementById(
+        "darkSwitch"
+      ).checked = dark;
+
+      localStorage.setItem(
+        "mouww-theme",
+        dark ? "dark" : "light"
+      );
+    }
+
+
+    function toggleThemeFromSwitch() {
+
+      const checked =
+        document.getElementById(
+          "darkSwitch"
+        ).checked;
+
+      if (
+        checked !==
+        document.body.classList.contains("dark")
+      ) {
+        toggleTheme();
+      }
+    }
+
+
+    /* Restore theme */
+
+    if (
+      localStorage.getItem("mouww-theme")
+      === "dark"
+    ) {
+
+      document.body.classList.add("dark");
+
+      document.getElementById(
+        "themeButton"
+      ).textContent = "☀️";
+
+      document.getElementById(
+        "darkSwitch"
+      ).checked = true;
+    }
+
+
+    /* Profile photo */
+
+    function changePhoto() {
+
+      document.getElementById(
+        "photoInput"
+      ).click();
+    }
+
+
+    function uploadPhoto(event) {
+
+      const file =
+        event.target.files[0];
+
+      if (!file) return;
+
+
+      if (!file.type.startsWith("image/")) {
+
+        showToast(
+          "Please select an image 🖼️"
+        );
+
+        return;
+      }
+
+
+      const reader =
+        new FileReader();
+
+      reader.onload = function(e) {
+
+        document.getElementById(
+          "profilePhoto"
+        ).innerHTML =
+          `<img src="${e.target.result}" alt="Profile photo">`;
+
+        localStorage.setItem(
+          "mouww-profile-photo",
+          e.target.result
+        );
+
+        showToast(
+          "Profile photo updated 💗"
+        );
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+
+    /* Restore profile photo */
+
+    const savedPhoto =
+      localStorage.getItem(
+        "mouww-profile-photo"
+      );
+
+    if (savedPhoto) {
+
+      document.getElementById(
+        "profilePhoto"
+      ).innerHTML =
+        `<img src="${savedPhoto}" alt="Profile photo">`;
+    }
+
+
+    /* Edit profile */
+
+    function editProfile() {
+
+      const currentName =
+        document.getElementById(
+          "profileName"
+        ).textContent;
+
+      const currentUsername =
+        document.getElementById(
+          "profileUsername"
+        ).textContent.replace("@","");
+
+
+      const name =
+        prompt(
+          "Enter your display name:",
+          currentName
+        );
+
+      if (name === null) return;
+
+
+      const username =
+        prompt(
+          "Enter your username:",
+          currentUsername
+        );
+
+      if (username === null) return;
+
+
+      if (!name.trim() || !username.trim()) {
+
+        showToast(
+          "Please enter valid details 💗"
+        );
+
+        return;
+      }
+
+
+      document.getElementById(
+        "profileName"
+      ).textContent =
+        name.trim();
+
+      document.getElementById(
+        "profileUsername"
+      ).textContent =
+        "@" + username.trim();
+
+
+      localStorage.setItem(
+        "mouww-name",
+        name.trim()
+      );
+
+      localStorage.setItem(
+        "mouww-username",
+        username.trim()
+      );
+
+      showToast(
+        "Profile updated ✨"
+      );
+    }
+
+
+    /* Restore profile */
+
+    const savedName =
+      localStorage.getItem("mouww-name");
+
+    const savedUsername =
+      localStorage.getItem("mouww-username");
+
+    if (savedName) {
+
+      document.getElementById(
+        "profileName"
+      ).textContent = savedName;
+    }
+
+    if (savedUsername) {
+
+      document.getElementById(
+        "profileUsername"
+      ).textContent =
+        "@" + savedUsername;
+    }
+
+
+    /* Animations */
+
+    function toggleAnimations() {
+
+      const enabled =
+        document.getElementById(
+          "animationSwitch"
+        ).checked;
+
+      document.body.style.setProperty(
+        "--animation-state",
+        enabled ? "running" : "paused"
+      );
+
+      document
+        .querySelectorAll(".orb")
+        .forEach(orb => {
+
+          orb.style.animationPlayState =
+            enabled ? "running" : "paused";
+
+        });
+
+      showToast(
+        enabled
+          ? "Animations enabled ✨"
+          : "Animations disabled"
+      );
+    }
+
+
+    /* Notifications */
+
+    function notificationToggle(element) {
+
+      showToast(
+        element.checked
+          ? "Notifications enabled 🔔"
+          : "Notifications disabled"
+      );
+    }
+
+
+    /* Privacy */
+
+    function openPrivacy() {
+
+      showToast(
+        "Privacy page will be connected next 🔐"
+      );
+    }
+
+
+    /* Logout */
+
+    function logout() {
+
+      const confirmLogout =
+        confirm(
+          "Do you want to log out of Mouww?"
+        );
+
+      if (!confirmLogout) return;
+
+      showToast(
+        "Logout will be connected to Supabase later 🔐"
+      );
+    }
+
+
+    /* Back */
+
+    function goBack() {
+
+      if (history.length > 1) {
+
+        history.back();
+
+      } else {
+
+        showToast(
+          "Home page will be connected later 🏠"
+        );
+      }
+    }
+
+  </script>
+
+</body>
+</html>
