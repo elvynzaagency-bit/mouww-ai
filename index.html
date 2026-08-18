@@ -127,6 +127,27 @@
         box-shadow: 0 20px 60px rgba(80,40,100,.18);
       }
     }
+  .mode-selector {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+  justify-content: center;
+}
+
+.mode {
+  width: auto;
+  height: auto;
+  padding: 9px 16px;
+  border-radius: 20px;
+  background: #f3e8f8;
+  color: #6d4b78;
+  font-size: 13px;
+}
+
+.mode.active {
+  background: #d18cff;
+  color: white;
+}
   </style>
 </head>
 
@@ -139,7 +160,19 @@
     <h1>Mouww 💗</h1>
     <div class="status">Your cute AI companion ✨</div>
   </div>
+<div class="mode-selector">
+  <button class="mode active" onclick="setMode('free')">
+    🟢 Free
+  </button>
 
+  <button class="mode" onclick="setMode('manual')">
+    🔵 Manual
+  </button>
+
+  <button class="mode" onclick="setMode('pro')">
+    🟣 Pro
+  </button>
+</div>
   <div class="chat" id="chat">
 
     <div class="message ai">
@@ -178,7 +211,32 @@
     SUPABASE_URL,
     SUPABASE_ANON_KEY
   );
-  
+  let currentMode = "free";
+
+function setMode(mode) {
+  currentMode = mode;
+
+  document.querySelectorAll(".mode").forEach(button => {
+    button.classList.remove("active");
+  });
+
+  const selectedButton = document.querySelector(
+    `.mode[onclick="setMode('${mode}')"]`
+  );
+
+  if (selectedButton) {
+    selectedButton.classList.add("active");
+  }
+
+  addMessage(
+    mode === "free"
+      ? "🟢 Free mode activated 💗"
+      : mode === "manual"
+      ? "🔵 Manual mode activated 💙"
+      : "🟣 Pro mode activated 💜",
+    "ai"
+  );
+}
   async function initMouwwAuth() {
     const { data: { session } } =
       await supabaseClient.auth.getSession();
