@@ -1,1 +1,920 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mouww — Stories</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg1: #ffe8f4;
+      --bg2: #eee5ff;
+      --card: rgba(255,255,255,.82);
+      --item: rgba(255,255,255,.72);
+      --text: #30253a;
+      --muted: #8d7896;
+      --accent: #b978ff;
+      --pink: #ff73b5;
+      --border: rgba(0,0,0,.06);
+    }
+
+    body.dark {
+      --bg1: #100b18;
+      --bg2: #21162d;
+      --card: rgba(29,21,40,.94);
+      --item: rgba(50,38,60,.92);
+      --text: #fff5ff;
+      --muted: #b9a9c0;
+      --border: rgba(255,255,255,.08);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+
+      background:
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(255,110,180,.35),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at 90% 90%,
+          rgba(135,100,255,.35),
+          transparent 30%
+        ),
+        linear-gradient(
+          135deg,
+          var(--bg1),
+          var(--bg2)
+        );
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 500px;
+      min-height: 100vh;
+
+      background: var(--card);
+
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+
+      position: relative;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width:600px) {
+      .app {
+        min-height: 90vh;
+        max-height: 900px;
+
+        border-radius: 30px;
+        overflow: hidden;
+
+        box-shadow:
+          0 25px 70px rgba(60,30,90,.22);
+      }
+    }
+
+    /* Header */
+
+    .header {
+      height: 65px;
+
+      padding: 0 15px;
+
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .back,
+    .theme {
+      width: 42px;
+      height: 42px;
+
+      border: none;
+      border-radius: 50%;
+
+      background: var(--item);
+      color: var(--text);
+
+      cursor: pointer;
+
+      font-size: 19px;
+    }
+
+    .title {
+      flex: 1;
+
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    /* Content */
+
+    .content {
+      flex: 1;
+
+      overflow-y: auto;
+
+      padding: 18px 15px 30px;
+    }
+
+    /* Add story */
+
+    .add-story {
+      width: 100%;
+
+      min-height: 110px;
+
+      border: none;
+
+      border-radius: 22px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255,115,181,.24),
+          rgba(185,120,255,.24)
+        );
+
+      color: var(--text);
+
+      display: flex;
+      align-items: center;
+
+      padding: 15px;
+
+      gap: 14px;
+
+      cursor: pointer;
+
+      border: 1px solid var(--border);
+
+      margin-bottom: 18px;
+    }
+
+    .add-avatar {
+      width: 72px;
+      height: 72px;
+
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 30px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ff9dcc,
+          #c19cff
+        );
+
+      color: white;
+
+      border: 3px solid var(--card);
+      outline: 2px solid var(--accent);
+    }
+
+    .add-info {
+      text-align: left;
+      flex: 1;
+    }
+
+    .add-info strong {
+      display: block;
+
+      font-size: 15px;
+
+      margin-bottom: 5px;
+    }
+
+    .add-info span {
+      color: var(--muted);
+
+      font-size: 12px;
+    }
+
+    .plus {
+      width: 38px;
+      height: 38px;
+
+      border-radius: 50%;
+
+      background: var(--accent);
+
+      color: white;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 22px;
+    }
+
+    /* Section */
+
+    .section-title {
+      color: var(--muted);
+
+      font-size: 12px;
+
+      text-transform: uppercase;
+
+      margin: 10px 4px;
+    }
+
+    /* Story card */
+
+    .story {
+      position: relative;
+
+      width: 100%;
+      height: 115px;
+
+      border-radius: 22px;
+
+      overflow: hidden;
+
+      margin-bottom: 10px;
+
+      cursor: pointer;
+
+      border: 1px solid var(--border);
+
+      background:
+        linear-gradient(
+          135deg,
+          #ff8cc7,
+          #a27aff
+        );
+    }
+
+    .story:nth-child(2) {
+      background:
+        linear-gradient(
+          135deg,
+          #74c9ff,
+          #9170ff
+        );
+    }
+
+    .story:nth-child(3) {
+      background:
+        linear-gradient(
+          135deg,
+          #ffb46e,
+          #ff6f9c
+        );
+    }
+
+    .story:nth-child(4) {
+      background:
+        linear-gradient(
+          135deg,
+          #7be0c0,
+          #6b9cff
+        );
+    }
+
+    .story-bg {
+      position: absolute;
+
+      inset: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 55px;
+
+      opacity: .75;
+    }
+
+    .story-info {
+      position: absolute;
+
+      inset: auto 0 0 0;
+
+      padding: 15px;
+
+      background:
+        linear-gradient(
+          transparent,
+          rgba(0,0,0,.62)
+        );
+
+      color: white;
+    }
+
+    .story-info strong {
+      display: block;
+
+      font-size: 14px;
+
+      margin-bottom: 3px;
+    }
+
+    .story-info span {
+      font-size: 10px;
+
+      opacity: .85;
+    }
+
+    .live {
+      position: absolute;
+
+      top: 12px;
+      right: 12px;
+
+      padding: 5px 9px;
+
+      border-radius: 12px;
+
+      background: rgba(255,70,100,.9);
+
+      color: white;
+
+      font-size: 9px;
+
+      font-weight: bold;
+    }
+
+    /* Viewer */
+
+    .viewer {
+      position: fixed;
+
+      inset: 0;
+
+      background: rgba(0,0,0,.92);
+
+      z-index: 50;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+    }
+
+    .viewer.show {
+      display: flex;
+    }
+
+    .viewer-card {
+      width: min(460px, 94vw);
+      height: min(780px, 90vh);
+
+      border-radius: 25px;
+
+      overflow: hidden;
+
+      position: relative;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ff83c2,
+          #886eff
+        );
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .viewer-emoji {
+      font-size: 120px;
+    }
+
+    .viewer-top {
+      position: absolute;
+
+      top: 0;
+      left: 0;
+      right: 0;
+
+      padding: 18px;
+
+      color: white;
+
+      display: flex;
+      align-items: center;
+
+      background:
+        linear-gradient(
+          rgba(0,0,0,.45),
+          transparent
+        );
+    }
+
+    .viewer-name {
+      flex: 1;
+
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .close {
+      width: 36px;
+      height: 36px;
+
+      border: none;
+      border-radius: 50%;
+
+      background: rgba(0,0,0,.35);
+
+      color: white;
+
+      cursor: pointer;
+
+      font-size: 18px;
+    }
+
+    .viewer-bottom {
+      position: absolute;
+
+      bottom: 0;
+      left: 0;
+      right: 0;
+
+      padding: 18px;
+
+      background:
+        linear-gradient(
+          transparent,
+          rgba(0,0,0,.55)
+        );
+
+      display: flex;
+      gap: 8px;
+    }
+
+    .reply {
+      flex: 1;
+
+      border: 1px solid rgba(255,255,255,.4);
+
+      background: rgba(255,255,255,.15);
+
+      color: white;
+
+      border-radius: 20px;
+
+      padding: 11px 14px;
+
+      outline: none;
+    }
+
+    .reply::placeholder {
+      color: rgba(255,255,255,.8);
+    }
+
+    .send {
+      border: none;
+
+      width: 42px;
+      height: 42px;
+
+      border-radius: 50%;
+
+      background: white;
+
+      color: #9b6cff;
+
+      cursor: pointer;
+    }
+
+    /* Toast */
+
+    .toast {
+      position: fixed;
+
+      left: 50%;
+      bottom: 25px;
+
+      transform: translate(-50%,20px);
+
+      opacity: 0;
+      pointer-events: none;
+
+      padding: 11px 17px;
+
+      border-radius: 20px;
+
+      background: rgba(30,20,40,.94);
+
+      color: white;
+
+      font-size: 12px;
+
+      z-index: 70;
+
+      transition: .3s;
+    }
+
+    .toast.show {
+      opacity: 1;
+
+      transform: translate(-50%,0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="app">
+
+    <header class="header">
+
+      <button
+        class="back"
+        onclick="goBack()"
+      >
+        ←
+      </button>
+
+      <div class="title">
+        Stories 📖
+      </div>
+
+      <button
+        class="theme"
+        id="themeButton"
+        onclick="toggleTheme()"
+      >
+        🌙
+      </button>
+
+    </header>
+
+
+    <section class="content">
+
+      <!-- Add Story -->
+
+      <button
+        class="add-story"
+        onclick="addStory()"
+      >
+
+        <div class="add-avatar">
+          🎀
+        </div>
+
+        <div class="add-info">
+
+          <strong>
+            Add to your story
+          </strong>
+
+          <span>
+            Share a moment with your friends
+          </span>
+
+        </div>
+
+        <div class="plus">
+          +
+        </div>
+
+      </button>
+
+
+      <div class="section-title">
+        Recent Stories
+      </div>
+
+
+      <!-- Stories -->
+
+      <div
+        class="story"
+        onclick="openStory('Ammu','🌸')"
+      >
+
+        <div class="story-bg">
+          🌸
+        </div>
+
+        <div class="live">
+          NEW
+        </div>
+
+        <div class="story-info">
+
+          <strong>
+            Ammu
+          </strong>
+
+          <span>
+            5 minutes ago
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="story"
+        onclick="openStory('Arjun','🎧')"
+      >
+
+        <div class="story-bg">
+          🎧
+        </div>
+
+        <div class="story-info">
+
+          <strong>
+            Arjun
+          </strong>
+
+          <span>
+            18 minutes ago
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="story"
+        onclick="openStory('Maya','🦋')"
+      >
+
+        <div class="story-bg">
+          🦋
+        </div>
+
+        <div class="story-info">
+
+          <strong>
+            Maya
+          </strong>
+
+          <span>
+            42 minutes ago
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="story"
+        onclick="openStory('Riya','✨')"
+      >
+
+        <div class="story-bg">
+          ✨
+        </div>
+
+        <div class="story-info">
+
+          <strong>
+            Riya
+          </strong>
+
+          <span>
+            1 hour ago
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- Story Viewer -->
+
+  <div
+    class="viewer"
+    id="viewer"
+  >
+
+    <div class="viewer-card">
+
+      <div class="viewer-top">
+
+        <div
+          class="viewer-name"
+          id="viewerName"
+        >
+          Story
+        </div>
+
+        <button
+          class="close"
+          onclick="closeStory()"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div
+        class="viewer-emoji"
+        id="viewerEmoji"
+      >
+        🌸
+      </div>
+
+
+      <div class="viewer-bottom">
+
+        <input
+          class="reply"
+          id="reply"
+          placeholder="Reply to story..."
+        >
+
+        <button
+          class="send"
+          onclick="sendReply()"
+        >
+          ➤
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="toast"
+    id="toast"
+  ></div>
+
+
+  <script>
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById("toast");
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+
+        toast.classList.remove("show");
+
+      }, 2200);
+    }
+
+
+    /* Add story */
+
+    function addStory() {
+
+      showToast(
+        "Story upload will be connected next 📖✨"
+      );
+    }
+
+
+    /* Open story */
+
+    function openStory(name,emoji) {
+
+      document.getElementById(
+        "viewerName"
+      ).textContent =
+        name + "'s Story";
+
+      document.getElementById(
+        "viewerEmoji"
+      ).textContent =
+        emoji;
+
+      document.getElementById(
+        "viewer"
+      ).classList.add("show");
+    }
+
+
+    /* Close */
+
+    function closeStory() {
+
+      document.getElementById(
+        "viewer"
+      ).classList.remove("show");
+    }
+
+
+    /* Reply */
+
+    function sendReply() {
+
+      const input =
+        document.getElementById(
+          "reply"
+        );
+
+      if (!input.value.trim()) {
+
+        showToast(
+          "Write a reply first 💗"
+        );
+
+        return;
+      }
+
+      input.value = "";
+
+      showToast(
+        "Reply sent 💌"
+      );
+    }
+
+
+    /* Theme */
+
+    function toggleTheme() {
+
+      document.body.classList.toggle("dark");
+
+      const dark =
+        document.body.classList.contains("dark");
+
+      document.getElementById(
+        "themeButton"
+      ).textContent =
+        dark ? "☀️" : "🌙";
+
+      localStorage.setItem(
+        "mouww-theme",
+        dark ? "dark" : "light"
+      );
+    }
+
+
+    if (
+      localStorage.getItem("mouww-theme")
+      === "dark"
+    ) {
+
+      document.body.classList.add("dark");
+
+      document.getElementById(
+        "themeButton"
+      ).textContent =
+        "☀️";
+    }
+
+
+    /* Back */
+
+    function goBack() {
+
+      if (history.length > 1) {
+
+        history.back();
+
+      } else {
+
+        showToast(
+          "Home page will be connected later 🏠"
+        );
+      }
+    }
+
+  </script>
+
+</body>
+</html>
