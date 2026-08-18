@@ -1,1 +1,958 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mouww — Profile</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg1: #ffe8f4;
+      --bg2: #eee5ff;
+      --card: rgba(255,255,255,.8);
+      --item: rgba(255,255,255,.72);
+      --text: #30253a;
+      --muted: #8d7896;
+      --accent: #b978ff;
+      --pink: #ff73b5;
+      --border: rgba(0,0,0,.06);
+    }
+
+    body.dark {
+      --bg1: #100b18;
+      --bg2: #21162d;
+      --card: rgba(29,21,40,.92);
+      --item: rgba(50,38,60,.92);
+      --text: #fff5ff;
+      --muted: #b9a9c0;
+      --border: rgba(255,255,255,.08);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+
+      background:
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(255,110,180,.35),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at 90% 90%,
+          rgba(135,100,255,.35),
+          transparent 30%
+        ),
+        linear-gradient(
+          135deg,
+          var(--bg1),
+          var(--bg2)
+        );
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 500px;
+      min-height: 100vh;
+
+      background: var(--card);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (min-width:600px) {
+      .app {
+        min-height: 90vh;
+        max-height: 900px;
+        border-radius: 30px;
+        overflow: hidden;
+
+        box-shadow:
+          0 25px 70px rgba(60,30,90,.22);
+      }
+    }
+
+    /* Header */
+
+    .header {
+      height: 65px;
+
+      padding: 0 16px;
+
+      display: flex;
+      align-items: center;
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .back,
+    .settings {
+      width: 42px;
+      height: 42px;
+
+      border: none;
+      border-radius: 50%;
+
+      background: var(--item);
+      color: var(--text);
+
+      cursor: pointer;
+
+      font-size: 19px;
+    }
+
+    .header-title {
+      flex: 1;
+
+      text-align: center;
+
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    /* Profile */
+
+    .profile-top {
+      padding: 25px 20px 20px;
+
+      text-align: center;
+    }
+
+    .avatar-wrap {
+      position: relative;
+
+      width: 105px;
+      height: 105px;
+
+      margin: 0 auto 14px;
+    }
+
+    .avatar {
+      width: 105px;
+      height: 105px;
+
+      border-radius: 50%;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ff9dcc,
+          #c29cff
+        );
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 48px;
+
+      overflow: hidden;
+
+      border: 4px solid var(--card);
+
+      box-shadow:
+        0 12px 30px rgba(150,90,210,.25);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .camera {
+      position: absolute;
+
+      right: 0;
+      bottom: 2px;
+
+      width: 34px;
+      height: 34px;
+
+      border: 3px solid var(--card);
+
+      border-radius: 50%;
+
+      background: var(--accent);
+      color: white;
+
+      cursor: pointer;
+    }
+
+    #photoInput {
+      display: none;
+    }
+
+    .name {
+      font-size: 23px;
+      margin-bottom: 4px;
+    }
+
+    .username {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .bio {
+      max-width: 330px;
+
+      margin: 0 auto;
+
+      color: var(--muted);
+
+      font-size: 13px;
+
+      line-height: 1.5;
+    }
+
+    /* Buttons */
+
+    .actions {
+      display: flex;
+
+      justify-content: center;
+
+      gap: 9px;
+
+      padding: 0 18px 20px;
+    }
+
+    .action-btn {
+      flex: 1;
+
+      max-width: 150px;
+
+      padding: 12px 14px;
+
+      border: none;
+
+      border-radius: 15px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+    }
+
+    .edit {
+      background: var(--item);
+      color: var(--text);
+
+      border: 1px solid var(--border);
+    }
+
+    .share {
+      background:
+        linear-gradient(
+          135deg,
+          var(--pink),
+          var(--accent)
+        );
+
+      color: white;
+    }
+
+    /* Stats */
+
+    .stats {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3,1fr);
+
+      margin: 0 16px 20px;
+
+      background: var(--item);
+
+      border-radius: 20px;
+
+      border: 1px solid var(--border);
+
+      overflow: hidden;
+    }
+
+    .stat {
+      text-align: center;
+
+      padding: 15px 5px;
+
+      border-right: 1px solid var(--border);
+    }
+
+    .stat:last-child {
+      border-right: none;
+    }
+
+    .stat strong {
+      display: block;
+
+      font-size: 18px;
+
+      margin-bottom: 4px;
+    }
+
+    .stat span {
+      font-size: 11px;
+
+      color: var(--muted);
+    }
+
+    /* Stories */
+
+    .section {
+      padding: 0 16px 20px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+
+      margin-bottom: 10px;
+    }
+
+    .section-header h3 {
+      flex: 1;
+      font-size: 15px;
+    }
+
+    .section-header button {
+      border: none;
+      background: transparent;
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .story-list {
+      display: flex;
+      gap: 12px;
+
+      overflow-x: auto;
+
+      padding-bottom: 4px;
+    }
+
+    .story {
+      min-width: 72px;
+
+      text-align: center;
+
+      cursor: pointer;
+    }
+
+    .story-circle {
+      width: 62px;
+      height: 62px;
+
+      margin: 0 auto 5px;
+
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ff75b6,
+          #9e73ff
+        );
+
+      color: white;
+
+      font-size: 25px;
+
+      border: 3px solid var(--card);
+      outline: 2px solid var(--accent);
+    }
+
+    .story span {
+      display: block;
+
+      font-size: 10px;
+
+      color: var(--muted);
+    }
+
+    /* Posts */
+
+    .posts {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3,1fr);
+
+      gap: 4px;
+
+      padding-bottom: 30px;
+    }
+
+    .post {
+      aspect-ratio: 1;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255,120,190,.5),
+          rgba(150,110,255,.5)
+        );
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 25px;
+
+      cursor: pointer;
+    }
+
+    /* Toast */
+
+    .toast {
+      position: fixed;
+
+      left: 50%;
+      bottom: 25px;
+
+      transform: translate(-50%,20px);
+
+      opacity: 0;
+      pointer-events: none;
+
+      padding: 11px 17px;
+
+      border-radius: 20px;
+
+      background: rgba(30,20,40,.94);
+
+      color: white;
+
+      font-size: 12px;
+
+      z-index: 20;
+
+      transition: .3s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%,0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="app">
+
+    <!-- Header -->
+
+    <header class="header">
+
+      <button
+        class="back"
+        onclick="goBack()"
+      >
+        ←
+      </button>
+
+      <div class="header-title">
+        Profile
+      </div>
+
+      <button
+        class="settings"
+        onclick="openSettings()"
+      >
+        ⚙️
+      </button>
+
+    </header>
+
+
+    <!-- Profile -->
+
+    <section class="profile-top">
+
+      <div class="avatar-wrap">
+
+        <div
+          class="avatar"
+          id="avatar"
+        >
+          🎀
+        </div>
+
+        <button
+          class="camera"
+          onclick="changePhoto()"
+        >
+          📷
+        </button>
+
+      </div>
+
+      <h1
+        class="name"
+        id="name"
+      >
+        Mouww User
+      </h1>
+
+      <p
+        class="username"
+        id="username"
+      >
+        @mouww_user
+      </p>
+
+      <p class="bio">
+        Welcome to my Mouww space 💗✨
+      </p>
+
+    </section>
+
+
+    <!-- Actions -->
+
+    <div class="actions">
+
+      <button
+        class="action-btn edit"
+        onclick="editProfile()"
+      >
+        ✏️ Edit Profile
+      </button>
+
+      <button
+        class="action-btn share"
+        onclick="shareProfile()"
+      >
+        🔗 Share
+      </button>
+
+    </div>
+
+
+    <!-- Stats -->
+
+    <div class="stats">
+
+      <div class="stat">
+
+        <strong id="posts">
+          0
+        </strong>
+
+        <span>
+          Posts
+        </span>
+
+      </div>
+
+      <div class="stat">
+
+        <strong id="followers">
+          0
+        </strong>
+
+        <span>
+          Followers
+        </span>
+
+      </div>
+
+      <div class="stat">
+
+        <strong id="following">
+          0
+        </strong>
+
+        <span>
+          Following
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- Stories -->
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <h3>
+          My Stories
+        </h3>
+
+        <button
+          onclick="addStory()"
+        >
+          + Add Story
+        </button>
+
+      </div>
+
+      <div class="story-list">
+
+        <div
+          class="story"
+          onclick="addStory()"
+        >
+
+          <div class="story-circle">
+            +
+          </div>
+
+          <span>
+            Add
+          </span>
+
+        </div>
+
+        <div class="story">
+
+          <div class="story-circle">
+            🌸
+          </div>
+
+          <span>
+            Today
+          </span>
+
+        </div>
+
+        <div class="story">
+
+          <div class="story-circle">
+            🎵
+          </div>
+
+          <span>
+            Music
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Posts -->
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <h3>
+          Posts
+        </h3>
+
+      </div>
+
+      <div class="posts">
+
+        <div class="post">🎵</div>
+        <div class="post">✨</div>
+        <div class="post">💗</div>
+        <div class="post">🌙</div>
+        <div class="post">🎧</div>
+        <div class="post">🌸</div>
+
+      </div>
+
+    </section>
+
+
+    <input
+      type="file"
+      id="photoInput"
+      accept="image/*"
+      onchange="uploadPhoto(event)"
+    >
+
+  </main>
+
+
+  <div
+    class="toast"
+    id="toast"
+  ></div>
+
+
+  <script>
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById("toast");
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+
+        toast.classList.remove("show");
+
+      }, 2300);
+    }
+
+
+    /* Photo */
+
+    function changePhoto() {
+
+      document.getElementById(
+        "photoInput"
+      ).click();
+    }
+
+
+    function uploadPhoto(event) {
+
+      const file =
+        event.target.files[0];
+
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+
+        showToast(
+          "Please select an image 🖼️"
+        );
+
+        return;
+      }
+
+      const reader =
+        new FileReader();
+
+      reader.onload = function(e) {
+
+        const src = e.target.result;
+
+        document.getElementById(
+          "avatar"
+        ).innerHTML =
+          `<img src="${src}" alt="Profile photo">`;
+
+        localStorage.setItem(
+          "mouww-profile-photo",
+          src
+        );
+
+        showToast(
+          "Profile photo updated 💗"
+        );
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+
+    /* Restore photo */
+
+    const savedPhoto =
+      localStorage.getItem(
+        "mouww-profile-photo"
+      );
+
+    if (savedPhoto) {
+
+      document.getElementById(
+        "avatar"
+      ).innerHTML =
+        `<img src="${savedPhoto}" alt="Profile photo">`;
+    }
+
+
+    /* Edit */
+
+    function editProfile() {
+
+      const oldName =
+        document.getElementById(
+          "name"
+        ).textContent;
+
+      const oldUsername =
+        document.getElementById(
+          "username"
+        ).textContent
+        .replace("@","");
+
+      const newName =
+        prompt(
+          "Enter your name:",
+          oldName
+        );
+
+      if (newName === null) return;
+
+      const newUsername =
+        prompt(
+          "Enter your username:",
+          oldUsername
+        );
+
+      if (newUsername === null) return;
+
+      if (
+        !newName.trim() ||
+        !newUsername.trim()
+      ) {
+
+        showToast(
+          "Please enter valid details 💗"
+        );
+
+        return;
+      }
+
+      document.getElementById(
+        "name"
+      ).textContent =
+        newName.trim();
+
+      document.getElementById(
+        "username"
+      ).textContent =
+        "@" + newUsername.trim();
+
+      localStorage.setItem(
+        "mouww-name",
+        newName.trim()
+      );
+
+      localStorage.setItem(
+        "mouww-username",
+        newUsername.trim()
+      );
+
+      showToast(
+        "Profile updated ✨"
+      );
+    }
+
+
+    /* Restore profile */
+
+    const savedName =
+      localStorage.getItem("mouww-name");
+
+    const savedUsername =
+      localStorage.getItem("mouww-username");
+
+    if (savedName) {
+
+      document.getElementById(
+        "name"
+      ).textContent = savedName;
+    }
+
+    if (savedUsername) {
+
+      document.getElementById(
+        "username"
+      ).textContent =
+        "@" + savedUsername;
+    }
+
+
+    /* Story */
+
+    function addStory() {
+
+      showToast(
+        "Story upload will be connected next 📖✨"
+      );
+    }
+
+
+    /* Share */
+
+    async function shareProfile() {
+
+      const username =
+        document.getElementById(
+          "username"
+        ).textContent;
+
+      const text =
+        `Check out my Mouww profile ${username} 💗`;
+
+      try {
+
+        if (navigator.share) {
+
+          await navigator.share({
+            title: "Mouww Profile",
+            text: text
+          });
+
+        } else {
+
+          await navigator.clipboard.writeText(text);
+
+          showToast(
+            "Profile link copied 🔗"
+          );
+        }
+
+      } catch {
+
+        showToast(
+          "Share cancelled"
+        );
+      }
+    }
+
+
+    /* Navigation */
+
+    function openSettings() {
+
+      window.location.href =
+        "../settings/settings.html";
+    }
+
+
+    function goBack() {
+
+      if (history.length > 1) {
+
+        history.back();
+
+      } else {
+
+        showToast(
+          "Home page will be connected later 🏠"
+        );
+      }
+    }
+
+  </script>
+
+</body>
+</html>
